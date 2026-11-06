@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vitalterra Insumos Agrícolas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Idea: surcos de siembra como motivo; hero verde profundo con carrusel de producto, resto en papel verde claro con acento trigo. */
+:root{
+  --forest:#0f3d2b;
+  --forest-2:#165239;
+  --ink:#10261b;
+  --leaf:#2e7d4f;
+  --wheat:#e3a72f;
+  --paper:#f1f4ec;
+  --card:#ffffff;
+  --line:#d6ddcf;
+  --muted:#4f5f4e;
+  --display:'Bricolage Grotesque','Segoe UI',system-ui,sans-serif;
+  --body:'Figtree','Segoe UI',system-ui,sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.55}
+img,svg{max-width:100%;display:block}
+a{color:inherit}
+h1,h2,h3{font-family:var(--display);line-height:1.08;text-wrap:balance;letter-spacing:-.01em}
+button{font:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--wheat);outline-offset:3px}
+.wrap{width:min(1180px,100% - 32px);margin-inline:auto}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 22px;border-radius:999px;border:2px solid transparent;font-weight:700;text-decoration:none;font-size:16px;transition:transform .15s,background .15s}
+.btn:hover{transform:translateY(-2px)}
+.btn-wheat{background:var(--wheat);color:#2a1d00}
+.btn-wheat:hover{background:#f0b63f}
+.btn-line{border-color:rgba(255,255,255,.55);color:#fff;background:transparent}
+.btn-line:hover{background:rgba(255,255,255,.1)}
+.btn-dark{background:var(--forest);color:#fff}
+.btn-dark:hover{background:var(--forest-2)}
+.btn-ghost{border-color:var(--line);background:#fff;color:var(--ink)}
+
+/* Header */
+header.top{position:sticky;top:0;z-index:30;background:rgba(15,61,43,.96);backdrop-filter:blur(8px);color:#fff}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 0}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-family:var(--display);font-weight:800;font-size:22px;letter-spacing:.02em}
+.brand img{height:50px;width:auto;border-radius:12px;background:#fff;padding:3px}
+.links{display:flex;gap:24px;align-items:center}
+.links a{text-decoration:none;font-weight:500;font-size:15px;opacity:.9}
+.links a:hover{opacity:1;text-decoration:underline;text-underline-offset:5px}
+.nav .btn{padding:9px 18px;font-size:15px}
+@media(max-width:860px){.links a:not(.btn){display:none}}
+
+/* Hero */
+.hero{background:var(--forest);color:#fff;position:relative;overflow:hidden;border-radius:0 0 44px 44px;padding:56px 0 48px}
+.hero::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(104deg,rgba(255,255,255,.045) 0 2px,transparent 2px 34px);pointer-events:none}
+.hero-grid{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:48px;align-items:center}
+@media(max-width:940px){.hero-grid{grid-template-columns:1fr;gap:32px}}
+.eyebrow{display:inline-block;font-weight:700;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--wheat);margin-bottom:16px}
+.hero h1{font-size:clamp(38px,5.4vw,66px);font-weight:800}
+.hero h1 em{font-style:normal;color:var(--wheat)}
+.hero p.lead{margin-top:20px;font-size:19px;max-width:30em;color:#d9e6dc}
+.hero .cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+.hero .facts{display:flex;flex-wrap:wrap;gap:8px 22px;margin-top:30px;font-size:14px;color:#bcd2c3}
+.hero .facts span::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--wheat);margin-right:8px}
+
+/* Carrusel */
+.carousel{background:var(--forest-2);border:1px solid rgba(255,255,255,.14);border-radius:28px;padding:18px;box-shadow:0 30px 60px -30px rgba(0,0,0,.6)}
+.stage{position:relative;display:flex;gap:8px;align-items:center}
+.arrow{flex:none;width:42px;height:42px;border-radius:50%;border:1px solid rgba(255,255,255,.35);background:transparent;color:#fff;font-size:20px;line-height:1}
+.arrow:hover{background:rgba(255,255,255,.12)}
+.slide{flex:1;min-width:0;display:flex;flex-wrap:wrap;align-items:center;gap:6px 22px;cursor:pointer}
+.slide.swap{animation:swap .45s ease}
+@keyframes swap{from{opacity:.2;transform:translateX(18px)}to{opacity:1;transform:none}}
+.slide .art{flex:1 1 210px;max-width:290px;margin-inline:auto}
+.slide .art img{width:100%;height:auto;aspect-ratio:1;object-fit:cover;border-radius:22px;box-shadow:0 18px 36px -18px rgba(0,0,0,.6)}
+.slide .info{flex:1 1 220px;padding:6px 4px}
+.tag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:999px;background:rgba(227,167,47,.18);color:var(--wheat)}
+.slide h2{font-size:clamp(24px,3vw,32px);margin:10px 0 6px;font-weight:800}
+.slide .short{color:#cfe0d4;font-size:15.5px}
+.slide .price{margin:14px 0 16px;font-family:var(--display);font-weight:800;font-size:32px;color:var(--wheat)}
+.slide .price small{white-space:nowrap;font-family:var(--body);font-weight:500;font-size:14px;color:#bcd2c3;margin-left:6px}
+.thumbs{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;margin-top:16px}
+@media(max-width:620px){.thumbs{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.thumb{position:relative;overflow:hidden;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.05);border-radius:14px;padding:8px 6px 10px;color:#fff;text-align:center}
+.thumb:hover{background:rgba(255,255,255,.12)}
+.thumb[aria-current="true"]{background:rgba(227,167,47,.16);border-color:var(--wheat)}
+.thumb img{width:100%;height:auto;max-width:64px;aspect-ratio:1;object-fit:cover;border-radius:10px;margin:0 auto}
+.thumb b{display:block;font-size:12px;font-weight:600;line-height:1.2;margin-top:4px;min-height:2.4em}
+.thumb .bar{position:absolute;left:0;bottom:0;height:3px;width:0;background:var(--wheat)}
+.thumb[aria-current="true"] .bar{animation:fill 6s linear forwards}
+.carousel.paused .thumb .bar{animation-play-state:paused}
+.carousel.static .thumb .bar{animation:none;width:100%}
+@keyframes fill{to{width:100%}}
+.hint{margin-top:12px;font-size:13px;color:#a9c2b0;text-align:center}
+
+/* Franja de servicios */
+.services{margin-top:-1px;padding:34px 0 8px}
+.services ul{list-style:none;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+@media(max-width:860px){.services ul{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.services li{display:flex;gap:12px;align-items:flex-start}
+.services svg{flex:none;width:36px;height:36px;color:var(--leaf)}
+.services b{display:block;font-size:15px}
+.services span{font-size:14px;color:var(--muted);line-height:1.35;display:block}
+
+/* Secciones */
+section{padding:72px 0}
+.sec-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:16px 32px;margin-bottom:32px}
+.sec-head h2{font-size:clamp(30px,4vw,46px);font-weight:800;max-width:15em}
+.sec-head p{max-width:28em;color:var(--muted)}
+.kicker{display:block;font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--leaf);margin-bottom:10px}
+
+.cats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+@media(max-width:820px){.cats{grid-template-columns:1fr}}
+.cat{display:flex;align-items:center;gap:18px;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:24px;padding:18px 20px;color:var(--ink);transition:transform .2s,box-shadow .2s}
+.cat:hover{transform:translateY(-4px);box-shadow:0 18px 30px -22px rgba(15,61,43,.6)}
+.cat img{flex:none;width:104px;height:104px !important;object-fit:cover;border-radius:18px}
+.cat h3{font-size:24px;font-weight:800}
+.cat p{font-size:14.5px;color:var(--muted);margin-top:4px}
+.cat span{display:inline-block;margin-top:10px;font-weight:700;font-size:14px;color:var(--leaf)}
+
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
+.chip{padding:9px 18px;border-radius:999px;border:1px solid var(--line);background:#fff;font-weight:600;font-size:15px;color:var(--ink)}
+.chip[aria-pressed="true"]{background:var(--forest);border-color:var(--forest);color:#fff}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:20px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:22px;overflow:hidden;display:flex;flex-direction:column;cursor:pointer;transition:transform .2s,box-shadow .2s}
+.card:hover{transform:translateY(-4px);box-shadow:0 18px 30px -22px rgba(15,61,43,.6)}
+.card .pic{background:#e8ecee}
+.card .pic img{width:100%;height:auto;aspect-ratio:1;object-fit:cover}
+.card .body{padding:16px 18px 20px;display:flex;flex-direction:column;gap:6px;flex:1}
+.card .cat-name{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--leaf)}
+.card h3{font-size:20px;font-weight:800}
+.card .short{font-size:14.5px;color:var(--muted)}
+.card .foot{margin-top:auto;padding-top:12px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.card .p{font-family:var(--display);font-weight:800;font-size:20px}
+.card .p small{display:block;font-family:var(--body);font-weight:500;font-size:12.5px;color:var(--muted)}
+.card .btn{padding:9px 16px;font-size:14px}
+.note{margin-top:22px;font-size:14px;color:var(--muted)}
+
+/* Asesoría */
+.advice{background:var(--forest);color:#fff;border-radius:44px}
+.advice .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:48px;align-items:center}
+@media(max-width:900px){.advice .wrap{grid-template-columns:1fr}}
+.advice .kicker{color:var(--wheat)}
+.advice h2{font-size:clamp(30px,4vw,46px);font-weight:800}
+.advice p{margin-top:16px;color:#d2e2d7;max-width:30em}
+.advice ul{margin:18px 0 26px;padding:0;list-style:none;display:grid;gap:8px;color:#e6f0e9}
+.advice li::before{content:"✓";color:var(--wheat);font-weight:800;margin-right:10px}
+.calc{background:#fff;color:var(--ink);border-radius:26px;padding:26px}
+.calc h3{font-size:24px;font-weight:800}
+.calc .sub{font-size:14.5px;color:var(--muted);margin:6px 0 18px}
+.calc .row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.calc label{display:block;font-size:13px;font-weight:700;margin-bottom:6px}
+.calc input{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--line);font:inherit;font-size:18px;font-weight:600;background:var(--paper);color:var(--ink)}
+.calc .out{margin:18px 0;padding:16px;border-radius:16px;background:#eaf3e4;font-size:15px}
+.calc .out b{display:block;font-family:var(--display);font-size:34px;line-height:1.1;color:var(--forest)}
+
+/* Compromiso */
+.pillars{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+@media(max-width:820px){.pillars{grid-template-columns:1fr}}
+.pillar{border-top:3px solid var(--leaf);padding-top:16px}
+.pillar h3{font-size:22px;font-weight:800;margin-bottom:8px}
+.pillar p{color:var(--muted);font-size:16px}
+
+.gallery{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:36px}
+.gallery img{width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;border-radius:22px}
+@media(max-width:760px){.gallery{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* Testimonios */
+.quotes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+@media(max-width:900px){.quotes{grid-template-columns:1fr}}
+.quote{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:24px;display:flex;flex-direction:column;gap:16px}
+.quote p{font-size:17px}
+.quote footer{margin-top:auto;display:flex;align-items:center;gap:12px;font-weight:700}
+.avatar{width:42px;height:42px;border-radius:50%;background:var(--forest);color:var(--wheat);display:grid;place-items:center;font-family:var(--display);font-weight:800}
+
+/* Cierre */
+.closing{background:var(--wheat);color:#2a1d00;border-radius:36px;padding:48px 32px;display:flex;flex-wrap:wrap;gap:24px 40px;align-items:center;justify-content:space-between}
+.closing h2{font-size:clamp(28px,3.6vw,42px);font-weight:800;max-width:14em}
+.closing p{margin-top:10px;max-width:30em}
+.closing .btn-dark{font-size:18px;padding:16px 28px}
+footer.site{background:var(--forest);color:#cfe0d4;padding:36px 0;margin-top:72px;font-size:15px}
+footer.site .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px 32px;align-items:center}
+footer.site b{font-family:var(--display);font-size:20px;color:#fff}
+
+/* Ventana de producto */
+.overlay{position:fixed;inset:0;z-index:100;background:rgba(8,26,18,.7);display:none;align-items:center;justify-content:center;padding:16px;overflow:auto}
+.overlay.open{display:flex}
+.modal{position:relative;background:#fff;color:var(--ink);border-radius:28px;width:min(900px,100%);max-height:calc(100% - 8px);overflow:auto;display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);animation:pop .25s ease}
+@keyframes pop{from{transform:scale(.96);opacity:.4}to{transform:none;opacity:1}}
+@media(max-width:720px){.modal{grid-template-columns:1fr}}
+.modal .m-art{background:#e8ecee;display:grid;place-items:center;min-height:240px}
+.modal .m-art img{width:100%;height:auto;aspect-ratio:1;object-fit:cover}
+.modal .m-body{padding:30px 28px 28px;display:flex;flex-direction:column;gap:12px}
+.modal h2{font-size:30px;font-weight:800;padding-right:36px}
+.modal .m-desc{color:var(--muted);font-size:16px}
+.modal dl{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;font-size:15px;margin:4px 0;padding:14px 0;border-block:1px solid var(--line)}
+.modal dt{font-weight:700}
+.modal dd{margin:0;color:var(--muted)}
+.m-price{font-family:var(--display);font-size:36px;font-weight:800;color:var(--forest)}
+.m-price small{font-family:var(--body);font-size:14px;font-weight:500;color:var(--muted);margin-left:6px}
+.buy{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.qty{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.qty button{width:40px;height:44px;border:0;background:var(--paper);font-size:20px;font-weight:700;color:var(--ink)}
+.qty output{min-width:44px;text-align:center;font-weight:700}
+.total{font-size:15px;color:var(--muted)}
+.total b{color:var(--ink)}
+.close{position:absolute;top:14px;right:14px;width:40px;height:40px;border-radius:50%;border:0;background:rgba(15,61,43,.1);font-size:22px;color:var(--ink);z-index:2}
+.close:hover{background:rgba(15,61,43,.2)}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap nav">
+    <a class="brand" href="#inicio" aria-label="Vitalterra, inicio"><img src="img/logo.jpg" alt="Vitalterra" width="56" height="50"></a>
+    <nav class="links" aria-label="Principal">
+      <a href="#catalogo">Catálogo</a>
+      <a href="#asesoria">Asesoría</a>
+      <a href="#compromiso">Compromiso</a>
+      <a href="#testimonios">Clientes</a>
+      <a class="btn btn-wheat" href="https://wa.me/573234098973" target="_blank" rel="noopener">WhatsApp</a>
+    </nav>
+  </div>
+</header>
+
+<main id="inicio">
+<div class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow">Insumos agrícolas</span>
+      <h1>Todo lo que tu cultivo necesita, <em>directo a tu tierra</em>.</h1>
+      <p class="lead">Fertilizantes, semillas y herramientas de calidad, con asesoría de ingenieros agrónomos y entrega hasta tu finca.</p>
+      <div class="cta">
+        <a class="btn btn-wheat" href="#catalogo">Ver catálogo</a>
+        <a class="btn btn-line" href="https://wa.me/573234098973" target="_blank" rel="noopener">Contactar</a>
+      </div>
+      <div class="facts"><span>Pago seguro</span><span>Entrega a tu finca</span><span>Asesoría en campo</span></div>
+    </div>
+
+    <div class="carousel" id="carousel" aria-roledescription="carrusel" aria-label="Productos destacados">
+      <div class="stage">
+        <button class="arrow" id="prev" aria-label="Producto anterior">‹</button>
+        <div class="slide" id="slide" aria-live="polite"></div>
+        <button class="arrow" id="next" aria-label="Producto siguiente">›</button>
+      </div>
+      <div class="thumbs" id="thumbs" role="group" aria-label="Elegir producto"></div>
+      <p class="hint">Elige un producto o toca la imagen para ver su ficha y precio.</p>
+    </div>
+  </div>
+</div>
+
+<div class="services">
+  <div class="wrap">
+    <ul>
+      <li><svg viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="9" width="26" height="18" rx="3"/><path d="M5 15h26M10 22h6"/></svg><div><b>Pago seguro</b><span>Confirmas tu pedido y pagas con tranquilidad.</span></div></li>
+      <li><svg viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9h18v15H3zM21 14h6l5 5v5H21z"/><circle cx="10" cy="26" r="3"/><circle cx="26" cy="26" r="3"/></svg><div><b>Logística eficiente</b><span>Entregamos directo en tu finca.</span></div></li>
+      <li><svg viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 31V15M18 21c-7 0-9-5-9-10 6 0 9 3 9 10ZM18 17c0-5 3-8 9-8 0 5-3 8-9 8Z"/></svg><div><b>Asesoría agronómica</b><span>Ingenieros que conocen tu cultivo.</span></div></li>
+      <li><svg viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 30l2-7a12 12 0 1 1 5 5z"/></svg><div><b>Atención por WhatsApp</b><span>Pedidos y dudas en el mismo chat.</span></div></li>
+    </ul>
+  </div>
+</div>
+
+<section id="categorias" style="padding-top:48px">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><span class="kicker">Categorías</span><h2>Empieza por lo que necesitas</h2></div>
+      <p>Tres líneas para cubrir el ciclo completo: nutrir el suelo, sembrar bien y trabajar con buenas herramientas.</p>
+    </div>
+    <div class="cats" id="cats"></div>
+  </div>
+</section>
+
+<section id="catalogo" style="padding-top:8px">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><span class="kicker">Catálogo</span><h2>Productos para tu cultivo</h2></div>
+      <p>Toca cualquier producto para ver su descripción, presentación y precio, y pedirlo por WhatsApp.</p>
+    </div>
+    <div class="filters" id="filters" role="group" aria-label="Filtrar por categoría"></div>
+    <div class="grid" id="grid"></div>
+    <p class="note">Precios de referencia en pesos colombianos (COP). Confirma disponibilidad y costo de envío por WhatsApp al +57 323 4098973.</p>
+  </div>
+</section>
+
+<section class="advice" id="asesoria">
+  <div class="wrap">
+    <div>
+      <span class="kicker">Asesoría en campo</span>
+      <h2>Un ingeniero agrónomo para tu cultivo</h2>
+      <p>Antes de comprar, habla con quien entiende de suelos, riego y nutrición. Te ayudamos a elegir el producto y la dosis que tu lote realmente necesita.</p>
+      <ul>
+        <li>Recomendación de fertilización según cultivo y etapa</li>
+        <li>Acompañamiento en riego y manejo del agua</li>
+        <li>Seguimiento después de tu compra</li>
+      </ul>
+      <a class="btn btn-wheat" href="https://wa.me/573234098973?text=Hola%20Vitalterra%2C%20quiero%20hablar%20con%20un%20ingeniero%20agr%C3%B3nomo." target="_blank" rel="noopener">Contactar ingeniero</a>
+    </div>
+    <div class="calc" aria-labelledby="calc-t">
+      <h3 id="calc-t">¿Cuántos bultos necesito?</h3>
+      <p class="sub">Cálculo rápido en bultos de 50 kg.</p>
+      <div class="row">
+        <div><label for="ha">Área (hectáreas)</label><input id="ha" type="number" min="0.1" step="0.1" value="1" inputmode="decimal"></div>
+        <div><label for="dose">Dosis (kg por ha)</label><input id="dose" type="number" min="10" step="10" value="300" inputmode="numeric"></div>
+      </div>
+      <div class="out" aria-live="polite"><b id="bags">6 bultos</b><span id="kg">300 kg en total</span></div>
+      <a class="btn btn-dark" id="calcWa" href="#" target="_blank" rel="noopener">Cotizar por WhatsApp</a>
+      <p class="sub" style="margin:12px 0 0">La dosis es orientativa. Tu ingeniero la ajusta según el análisis de suelo.</p>
+    </div>
+  </div>
+</section>
+
+<section id="compromiso">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><span class="kicker">Compromiso con la tierra</span><h2>Producir más sin agotar el suelo</h2></div>
+      <p>La sostenibilidad es prioridad en lo que ofrecemos: una agricultura responsable y eficiente.</p>
+    </div>
+    <div class="pillars">
+      <div class="pillar"><h3>Suelos vivos</h3><p>Abonos orgánicos y fertilización ajustada para cuidar la estructura y la fertilidad del lote.</p></div>
+      <div class="pillar"><h3>Agua bien usada</h3><p>Riego por goteo y asesoría para aprovechar cada litro y mejorar la cosecha.</p></div>
+      <div class="pillar"><h3>Dosis justas</h3><p>Aplicar lo necesario reduce costos, evita desperdicio y protege los cultivos vecinos.</p></div>
+    </div>
+    <div class="gallery" aria-label="Fotos del campo">
+      <img src="img/campo-plastico.jpg" alt="Cultivo sembrado sobre cobertura plástica" width="361" height="359" loading="lazy">
+      <img src="img/sandia-mata.jpg" alt="Planta de sandía con fruto en el suelo" width="361" height="359" loading="lazy">
+      <img src="img/lote-2.jpg" alt="Lote preparado con manguera de riego por goteo" width="580" height="722" loading="lazy">
+      <img src="img/sandias.jpg" alt="Cosecha de sandías" width="708" height="528" loading="lazy">
+    </div>
+  </div>
+</section>
+
+<section id="testimonios" style="padding-top:8px">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><span class="kicker">Clientes</span><h2>Lo que dicen quienes siembran con nosotros</h2></div>
+    </div>
+    <div class="quotes">
+      <figure class="quote"><p>Los fertilizantes son de excelente calidad y los agrónomos me acompañan en cada decisión.</p><footer><span class="avatar">C</span>Carlos Méndez</footer></figure>
+      <figure class="quote"><p>Con la asesoría en riego ahorré agua y mis cosechas mejoraron.</p><footer><span class="avatar">E</span>Elena Ruiz</footer></figure>
+      <figure class="quote"><p>Son mi socio de confianza: entregas puntuales y producto de buena calidad.</p><footer><span class="avatar">J</span>Javier Torres</footer></figure>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="closing">
+    <div>
+      <h2>Directo a tu tierra</h2>
+      <p>Pagos seguros y logística eficiente. Escríbenos con tu pedido y lo coordinamos contigo.</p>
+    </div>
+    <a class="btn btn-dark" href="https://wa.me/573234098973?text=Hola%20Vitalterra%2C%20quiero%20hacer%20un%20pedido." target="_blank" rel="noopener">Comprar ahora</a>
+  </div>
+</div>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div style="display:flex;align-items:center;gap:14px"><img src="img/logo.jpg" alt="Vitalterra" width="56" height="50" style="border-radius:12px;background:#fff;padding:3px"><div><b>VITALTERRA</b><br>Creciendo contigo</div></div>
+    <div>Teléfono y WhatsApp: <a href="https://wa.me/573234098973" target="_blank" rel="noopener">+57 323 4098973</a></div>
+    <div>© 2026 Vitalterra. Todos los derechos reservados.</div>
+  </div>
+</footer>
+
+<div class="overlay" id="overlay">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="m-title" id="modal">
+    <button class="close" id="mClose" aria-label="Cerrar">×</button>
+    <div class="m-art" id="mArt"></div>
+    <div class="m-body">
+      <span class="tag" id="mCat" style="align-self:flex-start;background:#e3efe0;color:#2e7d4f"></span>
+      <h2 id="m-title"></h2>
+      <p class="m-desc" id="mDesc"></p>
+      <dl id="mSpecs"></dl>
+      <div class="m-price" id="mPrice"></div>
+      <div class="buy">
+        <div class="qty" role="group" aria-label="Cantidad">
+          <button id="qMinus" aria-label="Menos">−</button>
+          <output id="qVal">1</output>
+          <button id="qPlus" aria-label="Más">+</button>
+        </div>
+        <span class="total">Total estimado: <b id="mTotal"></b></span>
+      </div>
+      <a class="btn btn-wheat" id="mWa" href="#" target="_blank" rel="noopener" style="align-self:flex-start">Pedir por WhatsApp</a>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+var WA='573234098973';
+var CATS={fert:'Fertilizantes',sem:'Semillas',herr:'Herramientas'};
+var CAT_TXT={fert:'Nutrición para el suelo y la planta.',sem:'Semilla seleccionada para sembrar con confianza.',herr:'Equipos para aplicar, podar y regar mejor.'};
+
+/* Productos de ejemplo: reemplaza nombres, precios y especificaciones por los reales. */
+var P=[
+ {id:'organico',cat:'fert',hero:1,img:'organico.jpg',tn:'Abono orgánico',
+  name:'Abono orgánico compostado',short:'Mejora la estructura y retiene humedad.',
+  desc:'Compost estabilizado a base de residuos vegetales. Aporta materia orgánica, activa la vida del suelo y mejora la retención de agua.',
+  specs:[['Presentación','Bulto de 25 kg'],['Aplicación','Incorporado al suelo antes de sembrar'],['Beneficio','Estructura y humedad del suelo'],['Cultivos','Todos, en especial huertas']],price:38000,unit:'bulto 25 kg'},
+ {id:'tomate',cat:'sem',hero:2,img:'tomate.jpg',tn:'Semilla de tomate',
+  name:'Semilla de tomate',short:'Frutos firmes para mercado fresco.',
+  desc:'Semilla de tomate para semillero y trasplante, de frutos firmes y buen tamaño.',
+  specs:[['Presentación','Sobre sellado'],['Primera cosecha','75 a 90 días tras el trasplante'],['Germinación','Mínimo 85 %'],['Sistema','Tutorado, campo abierto o invernadero']],price:58000,unit:'sobre'},
+ {id:'fumigadora',cat:'herr',hero:3,img:'fumigadora.jpg',tn:'Fumigadora 20 L',
+  name:'Fumigadora de espalda 20 L',short:'Aplicación pareja y cómoda en jornadas largas.',
+  desc:'Fumigadora manual de espalda con tanque de 20 litros, boquilla regulable y correas acolchadas para trabajar sin cansarte.',
+  specs:[['Capacidad','20 litros'],['Accionamiento','Palanca manual'],['Boquilla','Regulable'],['Uso','Fertilizante foliar y control fitosanitario']],price:185000,unit:'unidad'},
+ {id:'liquido',cat:'fert',hero:4,img:'liquido.jpg',tn:'Fertilizante líquido',
+  name:'Fertilizante líquido concentrado',short:'Nutrición para riego y aplicación foliar.',
+  desc:'Fertilizante líquido para etapas de alta demanda como floración y llenado de fruto. Se absorbe rápido y complementa la fertilización al suelo.',
+  specs:[['Presentación','Galón'],['Dosis de referencia','2 a 3 cm³ por litro de agua'],['Aplicación','Foliar o por riego'],['Cultivos','Hortalizas y frutales']],price:78000,unit:'galón'},
+ {id:'maiz',cat:'sem',hero:5,img:'maiz.jpg',tn:'Semilla de maíz',
+  name:'Semilla de maíz',short:'Alto vigor de germinación y cosecha uniforme.',
+  desc:'Semilla de maíz seleccionada para siembra tecnificada, con buena emergencia y plantas uniformes.',
+  specs:[['Presentación','Bolsa de 5 kg'],['Ciclo','120 a 130 días a cosecha'],['Germinación','Mínimo 90 %'],['Siembra','Una semilla cada 20 a 25 cm']],price:135000,unit:'bolsa 5 kg'},
+ {id:'tijera',cat:'herr',hero:6,img:'tijera.jpg',tn:'Tijera de podar',
+  name:'Tijera de podar profesional',short:'Corte limpio en ramas y tallos.',
+  desc:'Tijera de podar de acero con mango antideslizante. Hace cortes limpios que sanan rápido y cuidan la planta.',
+  specs:[['Hoja','Acero endurecido'],['Corte','Hasta 20 mm de diámetro'],['Mango','Antideslizante'],['Uso','Poda de formación y mantenimiento']],price:52000,unit:'unidad'},
+ {id:'tierra',cat:'fert',img:'tierra.jpg',tn:'Sustrato',
+  name:'Sustrato de tierra abonada',short:'Tierra preparada para semilleros y huerta.',
+  desc:'Sustrato listo para semilleros, bolsas y camas de siembra. Aporta materia orgánica y buen drenaje.',
+  specs:[['Presentación','Saco'],['Uso','Semilleros, macetas y camas de siembra'],['Beneficio','Aireación y retención de humedad'],['Aplicación','Se usa directo, sin mezclar']],price:22000,unit:'saco'},
+ {id:'cilantro',cat:'sem',img:'cilantro.jpg',tn:'Semilla de cilantro',
+  name:'Semilla de cilantro',short:'Siembra directa y cosecha rápida.',
+  desc:'Semilla de cilantro limpia y seleccionada para siembra directa en surco o en eras.',
+  specs:[['Presentación','Bolsa de 500 g'],['Primera cosecha','45 a 60 días'],['Germinación','Mínimo 85 %'],['Siembra','Directa, en surcos']],price:28000,unit:'bolsa 500 g'},
+ {id:'pala',cat:'herr',img:'pala.jpg',tn:'Pala de mano',
+  name:'Pala de mano con mango de madera',short:'Para sembrar, trasplantar y remover tierra.',
+  desc:'Pala de mano con hoja de acero inoxidable y mango de madera, ideal para trasplante y labores de huerta.',
+  specs:[['Hoja','Acero inoxidable'],['Mango','Madera'],['Uso','Trasplante, siembra y remoción de tierra'],['Mantenimiento','Limpiar y secar después de usar']],price:35000,unit:'unidad'}
+];
+
+/* Fotos de producto */
+function art(p){return '<img src="img/'+p.img+'" alt="'+p.name+'" width="506" height="506" loading="eager">';}
+function cop(n){return new Intl.NumberFormat('es-CO',{style:'currency',currency:'COP',maximumFractionDigits:0}).format(n);}
+function byId(id){for(var i=0;i<P.length;i++){if(P[i].id===id)return P[i];}return null;}
+function $(id){return document.getElementById(id);}
+
+/* Carrusel */
+var feat=P.filter(function(p){return p.hero;}).sort(function(a,b){return a.hero-b.hero;});
+var idx=0,timer=null,DELAY=6000;
+var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+var car=$('carousel'),slide=$('slide'),thumbs=$('thumbs');
+thumbs.innerHTML=feat.map(function(p,i){return '<button class="thumb" data-i="'+i+'" aria-label="Ver '+p.name+'">'+art(p)+'<b>'+p.tn+'</b><span class="bar"></span></button>';}).join('');
+function showSlide(i,animate){
+  idx=(i+feat.length)%feat.length;
+  var p=feat[idx];
+  slide.setAttribute('data-open',p.id);
+  slide.innerHTML='<div class="art">'+art(p)+'</div><div class="info"><span class="tag">'+CATS[p.cat]+'</span><h2>'+p.name+'</h2><p class="short">'+p.short+'</p><div class="price">'+cop(p.price)+'<small>'+p.unit+'</small></div><button class="btn btn-wheat" data-open="'+p.id+'">Ver producto</button></div>';
+  if(animate&&!reduce){slide.classList.remove('swap');void slide.offsetWidth;slide.classList.add('swap');}
+  var ts=thumbs.children;
+  for(var k=0;k<ts.length;k++){
+    ts[k].setAttribute('aria-current',k===idx?'true':'false');
+    var bar=ts[k].querySelector('.bar');bar.style.animation='none';void bar.offsetWidth;bar.style.animation='';
+  }
+}
+function start(){stop();if(reduce)return;timer=setInterval(function(){showSlide(idx+1,true);},DELAY);}
+function stop(){if(timer){clearInterval(timer);timer=null;}}
+if(reduce)car.classList.add('static');
+$('prev').addEventListener('click',function(){showSlide(idx-1,true);start();});
+$('next').addEventListener('click',function(){showSlide(idx+1,true);start();});
+thumbs.addEventListener('click',function(e){var b=e.target.closest('.thumb');if(!b)return;showSlide(+b.getAttribute('data-i'),true);start();});
+function pause(){car.classList.add('paused');stop();}
+function resume(){car.classList.remove('paused');start();}
+car.addEventListener('mouseenter',pause);car.addEventListener('mouseleave',resume);
+car.addEventListener('focusin',pause);car.addEventListener('focusout',resume);
+showSlide(0,false);start();
+
+/* Categorías y catálogo */
+var cur='all';
+$('cats').innerHTML=['fert','sem','herr'].map(function(c){
+  var rep=c==='fert'?byId('organico'):c==='sem'?byId('tomate'):byId('fumigadora');
+  var n=P.filter(function(p){return p.cat===c;}).length;
+  return '<button class="cat" data-filter="'+c+'">'+art(rep)+'<div><h3>'+CATS[c]+'</h3><p>'+CAT_TXT[c]+'</p><span>'+n+' productos →</span></div></button>';
+}).join('');
+var fl=[['all','Todos']].concat([['fert','Fertilizantes'],['sem','Semillas'],['herr','Herramientas']]);
+$('filters').innerHTML=fl.map(function(f){return '<button class="chip" data-filter="'+f[0]+'" aria-pressed="'+(f[0]==='all')+'">'+f[1]+'</button>';}).join('');
+function renderGrid(){
+  $('grid').innerHTML=P.filter(function(p){return cur==='all'||p.cat===cur;}).map(function(p){
+    return '<article class="card" data-open="'+p.id+'"><div class="pic">'+art(p)+'</div><div class="body"><span class="cat-name">'+CATS[p.cat]+'</span><h3>'+p.name+'</h3><p class="short">'+p.short+'</p><div class="foot"><div class="p">'+cop(p.price)+'<small>'+p.unit+'</small></div><button class="btn btn-dark" data-open="'+p.id+'">Ver</button></div></div></article>';
+  }).join('');
+}
+function setFilter(f){
+  cur=f;
+  var cs=$('filters').children;
+  for(var i=0;i<cs.length;i++){cs[i].setAttribute('aria-pressed',cs[i].getAttribute('data-filter')===f);}
+  renderGrid();
+}
+document.addEventListener('click',function(e){
+  var fb=e.target.closest('[data-filter]');
+  if(fb){setFilter(fb.getAttribute('data-filter'));if(fb.classList.contains('cat')){$('catalogo').scrollIntoView({behavior:reduce?'auto':'smooth'});}return;}
+  var ob=e.target.closest('[data-open]');
+  if(ob){openModal(ob.getAttribute('data-open'),ob.tagName==='BUTTON'?ob:null);}
+});
+renderGrid();
+
+/* Ventana de producto */
+var ov=$('overlay'),mp=null,qty=1,opener=null;
+function openModal(id,from){
+  mp=byId(id);if(!mp)return;
+  opener=from||document.activeElement;qty=1;
+    $('mArt').innerHTML=art(mp);
+  $('mCat').textContent=CATS[mp.cat];
+  $('m-title').textContent=mp.name;
+  $('mDesc').textContent=mp.desc;
+  $('mSpecs').innerHTML=mp.specs.map(function(s){return '<dt>'+s[0]+'</dt><dd>'+s[1]+'</dd>';}).join('');
+  $('mPrice').innerHTML=cop(mp.price)+'<small>'+mp.unit+'</small>';
+  updateBuy();
+  ov.classList.add('open');document.body.style.overflow='hidden';
+  $('mClose').focus();
+}
+function closeModal(){ov.classList.remove('open');document.body.style.overflow='';if(opener&&opener.focus)opener.focus();}
+function updateBuy(){
+  $('qVal').textContent=qty;
+  $('mTotal').textContent=cop(mp.price*qty);
+  var msg='Hola Vitalterra, quiero pedir: '+qty+' x '+mp.name+' ('+mp.unit+'). Total estimado: '+cop(mp.price*qty)+'.';
+  $('mWa').href='https://wa.me/'+WA+'?text='+encodeURIComponent(msg);
+}
+$('qMinus').addEventListener('click',function(){if(qty>1){qty--;updateBuy();}});
+$('qPlus').addEventListener('click',function(){if(qty<99){qty++;updateBuy();}});
+$('mClose').addEventListener('click',closeModal);
+ov.addEventListener('click',function(e){if(e.target===ov)closeModal();});
+document.addEventListener('keydown',function(e){
+  if(!ov.classList.contains('open'))return;
+  if(e.key==='Escape'){closeModal();return;}
+  if(e.key==='Tab'){
+    var f=$('modal').querySelectorAll('button,a[href]');var first=f[0],last=f[f.length-1];
+    if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}
+    else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}
+  }
+});
+
+/* Calculadora de bultos */
+function calc(){
+  var ha=parseFloat($('ha').value)||0,dose=parseFloat($('dose').value)||0;
+  var kg=ha*dose,bags=Math.ceil(kg/50-1e-9);
+  $('bags').textContent=bags+(bags===1?' bulto':' bultos');
+  $('kg').textContent=Math.round(kg).toLocaleString('es-CO')+' kg en total';
+  var msg='Hola Vitalterra, tengo '+ha+' ha y quiero cotizar '+bags+' bultos de 50 kg (dosis de '+dose+' kg/ha).';
+  $('calcWa').href='https://wa.me/'+WA+'?text='+encodeURIComponent(msg);
+}
+$('ha').addEventListener('input',calc);$('dose').addEventListener('input',calc);calc();
+})();
+</script>
+</body>
+</html>
