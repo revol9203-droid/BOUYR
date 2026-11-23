@@ -27,10 +27,10 @@ especie cargada de flor/fruto (foto REAL vuestra, no de banco). Una mano sosteni
 
 ## Gancho (0:00–0:15)
 
-**Opción A — "El Aviso" — 58/100 (WORKABLE)** ← la elegida
+**Opción A — "El Aviso" — 58/100 (aceptable)** ← la elegida
 > Si tu árbol frutal no florece, no le eches más abono. Échale esto, antes de perder otra temporada.
 
-**Opción B — "La Pregunta" — 55/100 (WORKABLE)**
+**Opción B — "La Pregunta" — 55/100 (aceptable)**
 > ¿Por qué tu limonero echa hojas pero nunca da limones? No es el agua y no es el sol.
 
 (Las puntuaciones son de la traducción al inglés: la herramienta solo lee inglés.)
